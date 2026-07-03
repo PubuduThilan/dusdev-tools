@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Support DuskDev Tools | Donations{% endblock %}
+{% block meta_description %}Support DuskDev Tools with Buy Me a Coffee, PayPal, or Ko-fi to help keep free online converter tools running.{% endblock %}
+
+{% block content %}
+<section class="page-hero compact-hero">
+  <div class="container">
+    <span class="eyebrow">Support DuskDev Tools</span>
+    <h1>Help keep free tools online</h1>
+    <p>DuskDev Tools is free to use. Your support helps cover hosting, development time, testing, and new features.</p>
+  </div>
+</section>
+
+<section class="support-band">
+  <div class="container">
+    <div class="support-content support-card">
+      <div>
+        <span class="eyebrow">Donation</span>
+        <h2>Support future development</h2>
+        <p>If this website saved your time, consider supporting us. Donations are optional, and the free tools will still be available.</p>
+      </div>
+      <div class="support-actions">
+        <a class="btn btn-outline{% if not donation_links.buy_me_a_coffee %} is-disabled{% endif %}" href="{{ donation_links.buy_me_a_coffee or '#' }}" target="_blank" rel="nofollow noopener">Buy Me a Coffee</a>
+        <a class="btn btn-outline{% if not donation_links.paypal %} is-disabled{% endif %}" href="{{ donation_links.paypal or '#' }}" target="_blank" rel="nofollow noopener">PayPal</a>
+        <a class="btn btn-outline{% if not donation_links.kofi %} is-disabled{% endif %}" href="{{ donation_links.kofi or '#' }}" target="_blank" rel="nofollow noopener">Ko-fi</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">Why support?</span>
+      <h2>What your support helps with</h2>
+    </div>
+    <div class="feature-grid">
+      <article class="feature-card">
+        <h3>Hosting</h3>
+        <p>File conversion needs server CPU, storage, and bandwidth, especially for audio and video tools.</p>
+      </article>
+      <article class="feature-card">
+        <h3>New tools</h3>
+        <p>Support helps add PDF merge, QR generator, image compressor, OCR, and more practical tools.</p>
+      </article>
+      <article class="feature-card">
+        <h3>Maintenance</h3>
+        <p>Keeping uploads safe, fixing bugs, and improving speed takes regular development work.</p>
+      </article>
+      <article class="feature-card">
+        <h3>Free access</h3>
+        <p>Donations help keep core tools free for students, creators, and small businesses.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section soft-section">
+  <div class="container narrow rich-text">
+    <h2>How to add your real donation links</h2>
+    <p>Add these environment variables in Render or your VPS. After redeploying, the buttons will point to your own donation pages.</p>
+    <pre><code>DONATION_BUY_ME_COFFEE_URL=https://www.buymeacoffee.com/yourname
+DONATION_PAYPAL_URL=https://www.paypal.me/yourname
+DONATION_KOFI_URL=https://ko-fi.com/yourname</code></pre>
+  </div>
+</section>
+{% endblock %}

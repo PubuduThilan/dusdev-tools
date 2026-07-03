@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}MP4 to MP3 Converter | Audio Video Tools | DuskDev Tools{% endblock %}
+{% block meta_description %}Convert MP4 to MP3, convert audio formats, compress videos, and create GIFs with DuskDev Tools. Uses FFmpeg with safe 25MB upload limits.{% endblock %}
+
+{% block content %}
+<section class="page-hero compact-hero">
+  <div class="container">
+    <span class="eyebrow">Audio and video</span>
+    <h1>Audio and Video Converter Tools</h1>
+    <p>Extract audio, convert audio formats, compress small videos, or create short GIFs. Large files may take time.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    {% if not ffmpeg_available %}
+      <div class="alert-box">
+        FFmpeg is not installed or is not available on this server. Audio and video conversions will show a clear error until FFmpeg is available. On Render, install imageio-ffmpeg or move heavy media tools to a VPS.
+      </div>
+    {% endif %}
+    <div class="tool-grid two-tools">
+      <div class="tool-panel">
+        <h2>MP4 to MP3 Converter</h2>
+        <p class="muted">Extract audio from an MP4 file and download it as MP3.</p>
+        <form class="ajax-upload-form" id="mp4-to-mp3-form" action="{{ url_for('mp4_to_mp3') }}" method="post" enctype="multipart/form-data">
+          <label class="file-drop" for="mp4-file">
+            <input id="mp4-file" name="file" type="file" accept=".mp4,video/mp4" required>
+            <span>Choose MP4 file</span>
+            <strong data-file-name>No file selected</strong>
+          </label>
+          <div class="upload-meta">
+            <span>MP4</span>
+            <span>{{ max_upload_mb }}MB max</span>
+          </div>
+          <button class="btn btn-primary full-width" type="submit">Convert to MP3</button>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="form-status" data-status role="status"></p>
+          <div class="result-box" data-result></div>
+        </form>
+      </div>
+
+      <div class="tool-panel">
+        <h2>Audio Converter</h2>
+        <p class="muted">Convert MP3, WAV, M4A, AAC, OGG, or FLAC into another audio format.</p>
+        <form class="ajax-upload-form" id="audio-converter-form" action="{{ url_for('convert_audio') }}" method="post" enctype="multipart/form-data">
+          <label class="file-drop" for="audio-file">
+            <input id="audio-file" name="file" type="file" accept=".mp3,.wav,.m4a,.aac,.ogg,.flac,audio/*" required>
+            <span>Choose audio file</span>
+            <strong data-file-name>No file selected</strong>
+          </label>
+          <label for="audio-output">Output format</label>
+          <select id="audio-output" name="output_format" required>
+            <option value="mp3">MP3</option>
+            <option value="wav">WAV</option>
+            <option value="aac">AAC</option>
+            <option value="ogg">OGG</option>
+          </select>
+          <div class="upload-meta">
+            <span>MP3, WAV, M4A, AAC, OGG, FLAC</span>
+            <span>{{ max_upload_mb }}MB max</span>
+          </div>
+          <button class="btn btn-primary full-width" type="submit">Convert Audio</button>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="form-status" data-status role="status"></p>
+          <div class="result-box" data-result></div>
+        </form>
+      </div>
+
+      <div class="tool-panel">
+        <h2>Video Compression</h2>
+        <p class="muted">Compress MP4, MOV, M4V, or WEBM video files with FFmpeg.</p>
+        <form class="ajax-upload-form" id="compress-video-form" action="{{ url_for('compress_video') }}" method="post" enctype="multipart/form-data">
+          <label class="file-drop" for="video-file">
+            <input id="video-file" name="file" type="file" accept=".mp4,.mov,.m4v,.webm,video/mp4,video/quicktime,video/webm" required>
+            <span>Choose video file</span>
+            <strong data-file-name>No file selected</strong>
+          </label>
+          <div class="upload-meta">
+            <span>MP4, MOV, M4V, WEBM</span>
+            <span>{{ max_upload_mb }}MB max</span>
+          </div>
+          <button class="btn btn-primary full-width" type="submit">Compress Video</button>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="form-status" data-status role="status"></p>
+          <div class="result-box" data-result></div>
+        </form>
+      </div>
+
+      <div class="tool-panel">
+        <h2>Video to GIF</h2>
+        <p class="muted">Create a short GIF from the first 12 seconds of a small video file.</p>
+        <form class="ajax-upload-form" id="video-to-gif-form" action="{{ url_for('video_to_gif') }}" method="post" enctype="multipart/form-data">
+          <label class="file-drop" for="gif-video-file">
+            <input id="gif-video-file" name="file" type="file" accept=".mp4,.mov,.m4v,.webm,video/mp4,video/quicktime,video/webm" required>
+            <span>Choose video file</span>
+            <strong data-file-name>No file selected</strong>
+          </label>
+          <div class="upload-meta">
+            <span>MP4, MOV, M4V, WEBM</span>
+            <span>{{ max_upload_mb }}MB max</span>
+          </div>
+          <button class="btn btn-primary full-width" type="submit">Create GIF</button>
+          <div class="progress-track" aria-hidden="true"><span></span></div>
+          <p class="form-status" data-status role="status"></p>
+          <div class="result-box" data-result></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section soft-section">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">Media guide</span>
+      <h2>Audio and video articles</h2>
+    </div>
+    <div class="article-grid">
+      <article class="article-card">
+        <h3>MP4 to MP3 for quick audio clips</h3>
+        <p>Extract speeches, lectures, and voice notes from small MP4 files.</p>
+      </article>
+      <article class="article-card">
+        <h3>Why video compression takes longer</h3>
+        <p>Video tools process more data, so smaller source files work best on free hosting.</p>
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock %}

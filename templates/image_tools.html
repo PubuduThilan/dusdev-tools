@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}JPG to PNG Converter | PNG to JPG Converter | DuskDev Tools{% endblock %}
+{% block meta_description %}Convert JPG to PNG, PNG to JPG, WEBP to PNG, and PNG to WEBP online for free with DuskDev Tools. Secure 25MB uploads and quick downloads.{% endblock %}
+
+{% block content %}
+<section class="page-hero compact-hero">
+  <div class="container">
+    <span class="eyebrow">Image conversion</span>
+    <h1>Image Converter Tools</h1>
+    <p>Convert JPG, PNG, and WEBP files online. Maximum upload size: {{ max_upload_mb }}MB.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container two-column">
+    <div class="tool-panel">
+      <h2>JPG to PNG Converter</h2>
+      <p class="muted">Also supports PNG to JPG, WEBP to PNG, and PNG to WEBP.</p>
+      <form class="ajax-upload-form" id="image-converter-form" action="{{ url_for('convert_image') }}" method="post" enctype="multipart/form-data">
+        <label for="image-conversion">Conversion</label>
+        <select id="image-conversion" name="conversion" required>
+          {% for key, conversion in conversions.items() %}
+            <option value="{{ key }}">{{ conversion.label }}</option>
+          {% endfor %}
+        </select>
+
+        <label class="file-drop" for="image-file">
+          <input id="image-file" name="file" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" required>
+          <span>Choose image file</span>
+          <strong data-file-name>No file selected</strong>
+        </label>
+
+        <div class="upload-meta">
+          <span>JPG, PNG, WEBP</span>
+          <span>{{ max_upload_mb }}MB max</span>
+        </div>
+
+        <button class="btn btn-primary full-width" type="submit">Convert Image</button>
+        <div class="progress-track" aria-hidden="true"><span></span></div>
+        <p class="form-status" data-status role="status"></p>
+        <div class="result-box" data-result></div>
+      </form>
+    </div>
+
+    <aside class="info-stack">
+      <article class="mini-card">
+        <h2>PNG to JPG Converter</h2>
+        <p>Turn transparent or large PNG images into shareable JPG files.</p>
+      </article>
+      <article class="mini-card">
+        <h2>WEBP to PNG Converter</h2>
+        <p>Create widely compatible PNG files from modern WEBP images.</p>
+      </article>
+      <article class="mini-card">
+        <h2>PNG to WEBP Converter</h2>
+        <p>Generate compact WEBP images for faster web publishing.</p>
+      </article>
+    </aside>
+  </div>
+</section>
+
+<section class="section soft-section">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">Image guide</span>
+      <h2>Image conversion notes</h2>
+    </div>
+    <div class="article-grid">
+      <article class="article-card">
+        <h3>JPG for photos</h3>
+        <p>JPG is a good fit for photos and images without transparency.</p>
+      </article>
+      <article class="article-card">
+        <h3>PNG for transparency</h3>
+        <p>PNG keeps sharp edges and transparent backgrounds for design assets.</p>
+      </article>
+      <article class="article-card">
+        <h3>WEBP for web speed</h3>
+        <p>WEBP can reduce file size while keeping strong image quality.</p>
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock %}

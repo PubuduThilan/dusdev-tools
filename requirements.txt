@@ -1,0 +1,5 @@
+Flask
+gunicorn
+Pillow
+Werkzeug
+imageio-ffmpeg

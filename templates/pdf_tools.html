@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Image to PDF Converter | DuskDev Tools{% endblock %}
+{% block meta_description %}Use DuskDev Tools to convert JPG, PNG, and WEBP images into PDF files online. PDF merge and split tools are coming soon.{% endblock %}
+
+{% block content %}
+<section class="page-hero compact-hero">
+  <div class="container">
+    <span class="eyebrow">PDF utilities</span>
+    <h1>PDF Tools</h1>
+    <p>Create PDFs from images now. More PDF tools are planned for DuskDev Tools.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container two-column">
+    <div class="tool-panel">
+      <h2>Image to PDF Converter</h2>
+      <p class="muted">Convert JPG, PNG, or WEBP into a downloadable PDF.</p>
+      <form class="ajax-upload-form" id="image-to-pdf-form" action="{{ url_for('image_to_pdf') }}" method="post" enctype="multipart/form-data">
+        <label class="file-drop" for="pdf-image-file">
+          <input id="pdf-image-file" name="file" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" required>
+          <span>Choose image file</span>
+          <strong data-file-name>No file selected</strong>
+        </label>
+
+        <div class="upload-meta">
+          <span>JPG, PNG, WEBP</span>
+          <span>{{ max_upload_mb }}MB max</span>
+        </div>
+
+        <button class="btn btn-primary full-width" type="submit">Create PDF</button>
+        <div class="progress-track" aria-hidden="true"><span></span></div>
+        <p class="form-status" data-status role="status"></p>
+        <div class="result-box" data-result></div>
+      </form>
+    </div>
+
+    <aside class="info-stack">
+      <article class="mini-card muted-card">
+        <span class="status-pill">Coming Soon</span>
+        <h2>PDF Merge</h2>
+        <p>Combine multiple PDFs into one clean document.</p>
+      </article>
+      <article class="mini-card muted-card">
+        <span class="status-pill">Coming Soon</span>
+        <h2>PDF Split</h2>
+        <p>Extract pages or split a PDF into smaller files.</p>
+      </article>
+    </aside>
+  </div>
+</section>
+
+<section class="section soft-section">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">PDF guide</span>
+      <h2>PDF articles</h2>
+    </div>
+    <div class="article-grid">
+      <article class="article-card">
+        <h3>Image to PDF for receipts</h3>
+        <p>Turn screenshots and scanned receipts into simple records.</p>
+      </article>
+      <article class="article-card">
+        <h3>Preparing images before PDF conversion</h3>
+        <p>Use clear, high-contrast images for readable PDF output.</p>
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock %}

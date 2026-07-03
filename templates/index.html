@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Free Online File Converter | DuskDev Tools{% endblock %}
+{% block meta_description %}DuskDev Tools is a free online file converter for images, PDFs, audio, video, and developer utilities. Convert files fast with no signup required.{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow">Free online tools</span>
+      <h1>Free Online File Converter Tools</h1>
+      <p>Convert images, PDFs, audio, and video files online with fast browser-friendly tools built for everyday work.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="{{ url_for('image_tools') }}">Start Converting</a>
+        <a class="btn btn-secondary" href="#tools">Browse Tools</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="floating-icons" aria-hidden="true">
+        <span class="float-icon float-icon-a">JPG</span>
+        <span class="float-icon float-icon-b">PDF</span>
+        <span class="float-icon float-icon-c">MP3</span>
+        <span class="float-icon float-icon-d">{ }</span>
+      </div>
+      <div class="hero-panel" aria-label="DuskDev Tools conversion preview">
+        <div class="panel-topline">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="converter-preview">
+          <div class="preview-file">
+            <strong>project-image.webp</strong>
+            <span>2.4 MB</span>
+          </div>
+          <div class="preview-flow">
+            <span>WEBP</span>
+            <span class="flow-line"></span>
+            <span>PNG</span>
+          </div>
+          <div class="preview-progress">
+            <span style="width: 82%"></span>
+          </div>
+          <div class="preview-result">
+            <span>Ready to download</span>
+            <strong>82%</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="tools">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">Tool library</span>
+      <h2>Choose a file tool</h2>
+      <p>Start with the essentials today, with room for more advanced utilities as DuskDev Tools grows.</p>
+    </div>
+    <div class="tool-grid">
+      <a class="tool-card accent-teal" href="{{ url_for('image_tools') }}">
+        <span class="tool-icon">IMG</span>
+        <span class="card-kicker">Images</span>
+        <h3>Image Tools</h3>
+        <p>Convert JPG, PNG, and WEBP files in a few seconds.</p>
+      </a>
+      <a class="tool-card accent-amber" href="{{ url_for('pdf_tools') }}">
+        <span class="tool-icon">PDF</span>
+        <span class="card-kicker">Documents</span>
+        <h3>PDF Tools</h3>
+        <p>Create PDFs from images, with merge and split tools planned.</p>
+      </a>
+      <a class="tool-card accent-coral" href="{{ url_for('audio_video_tools') }}">
+        <span class="tool-icon">MP3</span>
+        <span class="card-kicker">Media</span>
+        <h3>Audio Tools</h3>
+        <p>Extract MP3 audio from MP4 files when FFmpeg is available.</p>
+      </a>
+      <a class="tool-card accent-green" href="{{ url_for('audio_video_tools') }}">
+        <span class="tool-icon">MP4</span>
+        <span class="card-kicker">Media</span>
+        <h3>Video Tools</h3>
+        <p>Compress videos with safe limits for smaller uploads.</p>
+      </a>
+      <a class="tool-card accent-indigo" href="{{ url_for('developer_tools') }}">
+        <span class="tool-icon">{ }</span>
+        <span class="card-kicker">Code</span>
+        <h3>Developer Tools</h3>
+        <p>Format JSON, encode Base64, and generate strong passwords.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section dark-section">
+  <div class="container">
+    <div class="section-heading light">
+      <span class="eyebrow">Built for trust</span>
+      <h2>Fast tools without friction</h2>
+    </div>
+    <div class="feature-grid">
+      <article class="feature-card">
+        <h3>Free</h3>
+        <p>Core tools are available without subscriptions or hidden forms.</p>
+      </article>
+      <article class="feature-card">
+        <h3>Fast</h3>
+        <p>Focused workflows keep common conversions simple and direct.</p>
+      </article>
+      <article class="feature-card">
+        <h3>Secure</h3>
+        <p>Uploads are validated, dangerous extensions are blocked, and temporary files are cleaned up.</p>
+      </article>
+      <article class="feature-card">
+        <h3>No signup required</h3>
+        <p>Use the tools without creating an account.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="support-band" id="support">
+  <div class="container">
+    <div class="support-content support-card">
+      <div>
+        <span class="eyebrow">Support DuskDev Tools</span>
+        <h2>Keep free tools online</h2>
+        <p>This tool is free to use. If it saved your time, consider supporting us to keep it online.</p>
+      </div>
+      <div class="support-actions">
+        <a class="btn btn-outline{% if not donation_links.buy_me_a_coffee %} is-disabled{% endif %}" href="{{ donation_links.buy_me_a_coffee or '#' }}" target="_blank" rel="nofollow noopener">Buy Me a Coffee</a>
+        <a class="btn btn-outline{% if not donation_links.paypal %} is-disabled{% endif %}" href="{{ donation_links.paypal or '#' }}" target="_blank" rel="nofollow noopener">PayPal</a>
+        <a class="btn btn-outline{% if not donation_links.kofi %} is-disabled{% endif %}" href="{{ donation_links.kofi or '#' }}" target="_blank" rel="nofollow noopener">Ko-fi</a>
+        <a class="btn btn-primary" href="{{ url_for('support') }}">Support Page</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-heading">
+      <span class="eyebrow">Guides</span>
+      <h2>File converter articles</h2>
+    </div>
+    <div class="article-grid">
+      <article class="article-card">
+        <h3>How to choose between JPG, PNG, and WEBP</h3>
+        <p>A practical guide for balancing quality, transparency, and file size.</p>
+      </article>
+      <article class="article-card">
+        <h3>When to convert images into a PDF</h3>
+        <p>Simple ways to package receipts, scans, and visual documents.</p>
+      </article>
+      <article class="article-card">
+        <h3>Preparing media files for faster uploads</h3>
+        <p>Tips for smaller video files and smoother sharing.</p>
+      </article>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Developer Tools | JSON Formatter | DuskDev Tools{% endblock %}
+{% block meta_description %}Use free developer tools from DuskDev Tools: JSON formatter, Base64 encoder and decoder, password generator, and more coming soon.{% endblock %}
+
+{% block content %}
+<section class="page-hero compact-hero">
+  <div class="container">
+    <span class="eyebrow">Developer utilities</span>
+    <h1>Developer Tools</h1>
+    <p>Format JSON, encode Base64, decode Base64, and generate strong passwords in your browser.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container developer-grid">
+    <div class="tool-panel">
+      <h2>JSON Formatter</h2>
+      <textarea id="json-input" rows="10" placeholder='{"name":"DuskDev Tools"}'></textarea>
+      <div class="button-row">
+        <button class="btn btn-primary" id="format-json" type="button">Format JSON</button>
+        <button class="btn btn-secondary" id="minify-json" type="button">Minify</button>
+      </div>
+      <p class="form-status" id="json-status" role="status"></p>
+    </div>
+
+    <div class="tool-panel">
+      <h2>Base64 Encoder/Decoder</h2>
+      <textarea id="base64-input" rows="8" placeholder="Enter text or Base64"></textarea>
+      <div class="button-row">
+        <button class="btn btn-primary" id="encode-base64" type="button">Encode</button>
+        <button class="btn btn-secondary" id="decode-base64" type="button">Decode</button>
+      </div>
+      <textarea id="base64-output" rows="6" readonly placeholder="Result"></textarea>
+      <p class="form-status" id="base64-status" role="status"></p>
+    </div>
+
+    <div class="tool-panel">
+      <h2>Password Generator</h2>
+      <label for="password-length">Length</label>
+      <input id="password-length" type="number" min="8" max="64" value="18">
+      <div class="check-grid">
+        <label><input id="include-uppercase" type="checkbox" checked> Uppercase</label>
+        <label><input id="include-numbers" type="checkbox" checked> Numbers</label>
+        <label><input id="include-symbols" type="checkbox" checked> Symbols</label>
+      </div>
+      <button class="btn btn-primary full-width" id="generate-password" type="button">Generate Password</button>
+      <input id="password-output" type="text" readonly placeholder="Generated password">
+    </div>
+
+    <div class="tool-panel muted-card">
+      <span class="status-pill">Coming Soon</span>
+      <h2>QR Generator</h2>
+      <p>Create QR codes for URLs, text, and contact links.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}
