@@ -594,22 +594,79 @@ ensure_directories()
 
 @app.route("/sitemap.xml")
 def sitemap():
-    pages = [
-        {"loc": url_for("index", _external=True), "changefreq": "weekly", "priority": "1.0"},
-    {"loc": url_for("image_tools", _external=True), "changefreq": "weekly", "priority": "0.9"},
-    {"loc": url_for("pdf_tools", _external=True), "changefreq": "weekly", "priority": "0.9"},
-    {"loc": url_for("audio_video_tools", _external=True), "changefreq": "weekly", "priority": "0.9"},
-    {"loc": url_for("developer_tools", _external=True), "changefreq": "weekly", "priority": "0.8"},
-    {"loc": url_for("about", _external=True), "changefreq": "monthly", "priority": "0.6"},
-    {"loc": url_for("privacy", _external=True), "changefreq": "yearly", "priority": "0.4"},
-    {"loc": url_for("terms", _external=True), "changefreq": "yearly", "priority": "0.4"},
-    {"loc": url_for("contact", _external=True), "changefreq": "monthly", "priority": "0.5"},
-    {"loc": url_for("support", _external=True), "changefreq": "monthly", "priority": "0.5"},
+    base_url = "https://duskdevtools.store"
 
-    {"loc": "https://duskdevtools.store/jpg-to-png-converter", "changefreq": "weekly", "priority": "0.8"},
-    {"loc": "https://duskdevtools.store/png-to-jpg-converter", "changefreq": "weekly", "priority": "0.8"},
-    {"loc": "https://duskdevtools.store/image-to-pdf-converter", "changefreq": "weekly", "priority": "0.8"},
-    {"loc": "https://duskdevtools.store/mp4-to-mp3-converter", "changefreq": "weekly", "priority": "0.8"},
+    pages = [
+        {
+            "loc": f"{base_url}/",
+            "changefreq": "weekly",
+            "priority": "1.0",
+        },
+        {
+            "loc": f"{base_url}/image-tools",
+            "changefreq": "weekly",
+            "priority": "0.9",
+        },
+        {
+            "loc": f"{base_url}/jpg-to-png-converter",
+            "changefreq": "weekly",
+            "priority": "0.9",
+        },
+        {
+            "loc": f"{base_url}/png-to-jpg-converter",
+            "changefreq": "weekly",
+            "priority": "0.9",
+        },
+        {
+            "loc": f"{base_url}/pdf-tools",
+            "changefreq": "weekly",
+            "priority": "0.9",
+        },
+        {
+            "loc": f"{base_url}/image-to-pdf-converter",
+            "changefreq": "weekly",
+            "priority": "0.9",
+        },
+        {
+            "loc": f"{base_url}/audio-video-tools",
+            "changefreq": "weekly",
+            "priority": "0.9",
+        },
+        {
+            "loc": f"{base_url}/mp4-to-mp3-converter",
+            "changefreq": "weekly",
+            "priority": "0.9",
+        },
+        {
+            "loc": f"{base_url}/developer-tools",
+            "changefreq": "weekly",
+            "priority": "0.8",
+        },
+        {
+            "loc": f"{base_url}/about",
+            "changefreq": "monthly",
+            "priority": "0.6",
+        },
+        {
+            "loc": f"{base_url}/privacy",
+            "changefreq": "yearly",
+            "priority": "0.4",
+        },
+        {
+            "loc": f"{base_url}/terms",
+            "changefreq": "yearly",
+            "priority": "0.4",
+        },
+        {
+            "loc": f"{base_url}/contact",
+            "changefreq": "monthly",
+            "priority": "0.5",
+        },
+        {
+            "loc": f"{base_url}/support",
+            "changefreq": "monthly",
+            "priority": "0.5",
+        },
     ]
 
     xml = ['<?xml version="1.0" encoding="UTF-8"?>']
@@ -618,22 +675,17 @@ def sitemap():
     )
 
     for page in pages:
-        xml.append(
-            f"""
-            <url>
-                <loc>{page["loc"]}</loc>
-                <changefreq>{page["changefreq"]}</changefreq>
-                <priority>{page["priority"]}</priority>
-            </url>
-            """
-        )
+        xml.append(f"""
+        <url>
+            <loc>{page["loc"]}</loc>
+            <changefreq>{page["changefreq"]}</changefreq>
+            <priority>{page["priority"]}</priority>
+        </url>
+        """)
 
     xml.append("</urlset>")
 
-    return Response(
-        "\n".join(xml),
-        mimetype="application/xml"
-    )
+    return Response("\n".join(xml), mimetype="application/xml")
 
 
 @app.route("/robots.txt")
