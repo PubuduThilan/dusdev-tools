@@ -49,6 +49,29 @@ class DuskDevToolsSmokeTest(unittest.TestCase):
         download.close()
         duskdev.safe_remove(duskdev.CONVERTED_DIR / output_name)
 
+    def test_image_conversion_supports_quality_and_resize(self):
+        source = BytesIO()
+        Image.new("RGBA", (40, 20), (20, 120, 90, 160)).save(source, format="PNG")
+        source.seek(0)
+
+        response = self.client.post(
+            "/api/convert-image",
+            data={
+                "conversion": "png_to_jpg",
+                "quality": "60",
+                "width": "20",
+                "height": "10",
+                "file": (source, "sample.png"),
+            },
+            content_type="multipart/form-data",
+        )
+
+        self.assertEqual(response.status_code, 200, response.get_data(as_text=True))
+        output_name = response.get_json()["filename"]
+        with Image.open(duskdev.CONVERTED_DIR / output_name) as image:
+            self.assertEqual(image.size, (20, 10))
+        duskdev.safe_remove(duskdev.CONVERTED_DIR / output_name)
+
     def test_image_to_pdf_conversion(self):
         source = BytesIO()
         Image.new("RGB", (20, 20), (240, 180, 50)).save(source, format="JPEG")

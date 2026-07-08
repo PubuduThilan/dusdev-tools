@@ -27,30 +27,30 @@ MAX_FILE_SIZE = 25 * 1024 * 1024
 MAX_FILE_SIZE_MB = MAX_FILE_SIZE // (1024 * 1024)
 
 IMAGE_CONVERSIONS = {
-    "jpg_to_png": {
-        "label": "JPG to PNG",
-        "inputs": {"jpg", "jpeg"},
-        "output": "png",
-    },
-    "png_to_jpg": {
-        "label": "PNG to JPG",
-        "inputs": {"png"},
-        "output": "jpg",
-    },
-    "webp_to_png": {
-        "label": "WEBP to PNG",
-        "inputs": {"webp"},
-        "output": "png",
-    },
-    "png_to_webp": {
-        "label": "PNG to WEBP",
-        "inputs": {"png"},
-        "output": "webp",
-    },
+    "jpg_to_png": {"label": "PNG", "inputs": {"jpg", "jpeg"}, "output": "png"},
+    "jpg_to_webp": {"label": "WEBP", "inputs": {"jpg", "jpeg"}, "output": "webp"},
+    "jpg_to_bmp": {"label": "BMP", "inputs": {"jpg", "jpeg"}, "output": "bmp"},
+    "jpg_to_tiff": {"label": "TIFF", "inputs": {"jpg", "jpeg"}, "output": "tiff"},
+    "png_to_jpg": {"label": "JPG", "inputs": {"png"}, "output": "jpg"},
+    "png_to_webp": {"label": "WEBP", "inputs": {"png"}, "output": "webp"},
+    "png_to_bmp": {"label": "BMP", "inputs": {"png"}, "output": "bmp"},
+    "png_to_tiff": {"label": "TIFF", "inputs": {"png"}, "output": "tiff"},
+    "webp_to_jpg": {"label": "JPG", "inputs": {"webp"}, "output": "jpg"},
+    "webp_to_png": {"label": "PNG", "inputs": {"webp"}, "output": "png"},
+    "webp_to_bmp": {"label": "BMP", "inputs": {"webp"}, "output": "bmp"},
+    "webp_to_tiff": {"label": "TIFF", "inputs": {"webp"}, "output": "tiff"},
+    "bmp_to_jpg": {"label": "JPG", "inputs": {"bmp"}, "output": "jpg"},
+    "bmp_to_png": {"label": "PNG", "inputs": {"bmp"}, "output": "png"},
+    "bmp_to_webp": {"label": "WEBP", "inputs": {"bmp"}, "output": "webp"},
+    "bmp_to_tiff": {"label": "TIFF", "inputs": {"bmp"}, "output": "tiff"},
+    "tiff_to_jpg": {"label": "JPG", "inputs": {"tiff", "tif"}, "output": "jpg"},
+    "tiff_to_png": {"label": "PNG", "inputs": {"tiff", "tif"}, "output": "png"},
+    "tiff_to_webp": {"label": "WEBP", "inputs": {"tiff", "tif"}, "output": "webp"},
+    "tiff_to_bmp": {"label": "BMP", "inputs": {"tiff", "tif"}, "output": "bmp"},
 }
 
-IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "webp"}
-PDF_IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "webp"}
+IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "webp", "bmp", "tiff", "tif"}
+PDF_IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "webp", "bmp", "tiff", "tif"}
 MP4_EXTENSIONS = {"mp4"}
 VIDEO_EXTENSIONS = {"mp4", "mov", "m4v", "webm"}
 AUDIO_EXTENSIONS = {"mp3", "wav", "m4a", "aac", "ogg", "flac"}
@@ -170,6 +170,41 @@ def flatten_to_rgb(image):
 def verify_image(path):
     with Image.open(path) as image:
         image.verify()
+
+
+def parse_optional_int(value, field_name, minimum=1, maximum=None):
+    if value is None:
+        return None
+
+    text = str(value).strip()
+    if not text:
+        return None
+
+    try:
+        parsed = int(text)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"{field_name} must be a whole number.") from exc
+
+    if parsed < minimum:
+        raise ValueError(f"{field_name} must be at least {minimum}.")
+    if maximum is not None and parsed > maximum:
+        raise ValueError(f"{field_name} must be at most {maximum}.")
+    return parsed
+
+
+def resize_image(image, width=None, height=None):
+    if width is None and height is None:
+        return image
+
+    if width is None and height is not None:
+        ratio = height / image.height
+        width = max(1, int(round(image.width * ratio)))
+    elif height is None and width is not None:
+        ratio = width / image.width
+        height = max(1, int(round(image.height * ratio)))
+
+    resampling = getattr(Image, "Resampling", Image).LANCZOS
+    return image.resize((width, height), resampling)
 
 
 def ffmpeg_path():
@@ -326,6 +361,13 @@ def convert_image():
             400,
         )
 
+    try:
+        quality = parse_optional_int(request.form.get("quality"), "Quality", 1, 100)
+        width = parse_optional_int(request.form.get("width"), "Width", 1)
+        height = parse_optional_int(request.form.get("height"), "Height", 1)
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+
     output_extension = conversion["output"]
     output_name = unique_output_name(upload_path, output_extension)
     output_path = CONVERTED_DIR / output_name
@@ -333,13 +375,22 @@ def convert_image():
     try:
         verify_image(upload_path)
         with Image.open(upload_path) as image:
+            if width is not None or height is not None:
+                image = resize_image(image, width=width, height=height)
+
             if output_extension == "jpg":
                 image = flatten_to_rgb(image)
-                image.save(output_path, "JPEG", quality=92, optimize=True)
+                image.save(output_path, "JPEG", quality=quality or 92, optimize=True)
             elif output_extension == "webp":
-                image.save(output_path, "WEBP", quality=90, method=6)
-            else:
+                image.save(output_path, "WEBP", quality=quality or 90, method=6)
+            elif output_extension == "png":
                 image.save(output_path, "PNG", optimize=True)
+            elif output_extension == "bmp":
+                image = flatten_to_rgb(image)
+                image.save(output_path, "BMP")
+            elif output_extension == "tiff":
+                image = flatten_to_rgb(image)
+                image.save(output_path, "TIFF")
     except (UnidentifiedImageError, OSError):
         safe_remove(output_path)
         return jsonify({"error": "We could not read that image file."}), 400

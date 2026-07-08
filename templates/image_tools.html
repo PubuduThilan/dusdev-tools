@@ -1,39 +1,64 @@
 {% extends "base.html" %}
 
-{% block title %}JPG to PNG Converter | PNG to JPG Converter | DuskDev Tools{% endblock %}
-{% block meta_description %}Convert JPG to PNG, PNG to JPG, WEBP to PNG, and PNG to WEBP online for free with DuskDev Tools. Secure 25MB uploads and quick downloads.{% endblock %}
+{% block title %}Image Converter - JPG, PNG, WEBP, BMP, TIFF | DuskDev Tools{% endblock %}
+{% block meta_description %}Convert between JPG, PNG, WEBP, BMP, and TIFF formats online for free with DuskDev Tools. Adjust quality and resize images. Secure 25MB uploads.{% endblock %}
 
 {% block content %}
 <section class="page-hero compact-hero">
   <div class="container">
     <span class="eyebrow">Image conversion</span>
     <h1>Image Converter Tools</h1>
-    <p>Convert JPG, PNG, and WEBP files online. Maximum upload size: {{ max_upload_mb }}MB.</p>
+    <p>Convert JPG, PNG, WEBP, BMP, and TIFF files online. Maximum upload size: {{ max_upload_mb }}MB.</p>
   </div>
 </section>
 
 <section class="section">
   <div class="container two-column">
     <div class="tool-panel">
-      <h2>JPG to PNG Converter</h2>
-      <p class="muted">Also supports PNG to JPG, WEBP to PNG, and PNG to WEBP.</p>
+      <h2>Image Converter</h2>
+      <p class="muted">Convert between JPG, PNG, WEBP, BMP, and TIFF with quality and resize controls.</p>
       <form class="ajax-upload-form" id="image-converter-form" action="{{ url_for('convert_image') }}" method="post" enctype="multipart/form-data">
-        <label for="image-conversion">Conversion</label>
-        <select id="image-conversion" name="conversion" required>
-          {% for key, conversion in conversions.items() %}
-            <option value="{{ key }}">{{ conversion.label }}</option>
-          {% endfor %}
-        </select>
-
         <label class="file-drop" for="image-file">
-          <input id="image-file" name="file" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" required>
+          <input id="image-file" name="file" type="file" accept=".jpg,.jpeg,.png,.webp,.bmp,.tiff,.tif,image/jpeg,image/png,image/webp,image/bmp,image/x-bmp,image/tiff" required>
           <span>Choose image file</span>
           <strong data-file-name>No file selected</strong>
         </label>
 
         <div class="upload-meta">
-          <span>JPG, PNG, WEBP</span>
+          <span>JPG, PNG, WEBP, BMP, TIFF</span>
           <span>{{ max_upload_mb }}MB max</span>
+        </div>
+
+        <div id="conversion-controls" style="display: none;">
+          <div class="file-type-info" style="margin-bottom: 16px; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 6px; font-size: 0.92rem; color: var(--teal);">
+            Detected format: <strong id="detected-format">-</strong>
+          </div>
+
+          <label for="image-conversion">Convert to</label>
+          <select id="image-conversion" name="conversion" required>
+            <option value="">Select output format...</option>
+            {% for key, conversion in conversions.items() %}
+              <option value="{{ key }}" data-input-types="{{ conversion.inputs|join(',') }}">{{ conversion.label }}</option>
+            {% endfor %}
+          </select>
+
+          <div class="quality-control">
+            <label for="image-quality">Quality</label>
+            <div class="quality-display">
+              <input id="image-quality" name="quality" type="range" min="1" max="100" value="92" class="quality-slider">
+              <span class="quality-value">92%</span>
+            </div>
+          </div>
+
+          <label>Resize (optional)</label>
+          <div class="form-row">
+            <input id="image-width" name="width" type="number" min="1" step="1" placeholder="Auto">
+            <input id="image-height" name="height" type="number" min="1" step="1" placeholder="Auto">
+          </div>
+          <label class="checkbox-label">
+            <input type="checkbox" id="preserve-aspect" name="preserve_aspect" checked>
+            <span>Preserve aspect ratio</span>
+          </label>
         </div>
 
         <button class="btn btn-primary full-width" type="submit">Convert Image</button>

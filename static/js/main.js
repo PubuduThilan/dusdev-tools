@@ -38,22 +38,63 @@ function bindUploadForms() {
     const submitButton = form.querySelector('button[type="submit"]');
     const fileNameLabel = form.querySelector("[data-file-name]");
     const dropZone = fileInput ? fileInput.closest(".file-drop") : null;
+    const qualitySlider = form.querySelector(".quality-slider");
+    const qualityValue = form.querySelector(".quality-value");
+
+    if (qualitySlider && qualityValue) {
+      qualitySlider.addEventListener("input", (event) => {
+        qualityValue.textContent = event.target.value + "%";
+      });
+    }
 
     if (fileInput && fileNameLabel) {
       fileInput.addEventListener("change", () => {
         const file = fileInput.files[0];
         clearResult(form);
+        const conversionControls = form.querySelector("#conversion-controls");
+        const conversionSelect = form.querySelector("#image-conversion");
+        const detectedFormatDisplay = form.querySelector("#detected-format");
+        
         if (!file) {
           fileNameLabel.textContent = "No file selected";
           setStatus(form, "");
+          if (conversionControls) conversionControls.style.display = "none";
           return;
         }
 
         fileNameLabel.textContent = file.name;
         if (file.size > MAX_FILE_SIZE) {
           setStatus(form, "Files must be 25MB or smaller.", "error");
-        } else {
-          setStatus(form, "");
+          if (conversionControls) conversionControls.style.display = "none";
+          return;
+        }
+        
+        // Detect file extension and filter conversion options
+        const fileExtension = file.name.split(".").pop().toLowerCase();
+        if (detectedFormatDisplay) {
+          detectedFormatDisplay.textContent = fileExtension.toUpperCase();
+        }
+        
+        if (conversionSelect && conversionControls) {
+          const allOptions = conversionSelect.querySelectorAll("option[data-input-types]");
+          let visibleCount = 0;
+          
+          allOptions.forEach((option) => {
+            const inputTypes = option.dataset.inputTypes.split(",");
+            const isValid = inputTypes.includes(fileExtension);
+            option.style.display = isValid ? "block" : "none";
+            if (isValid) visibleCount++;
+          });
+          
+          if (visibleCount > 0) {
+            conversionControls.style.display = "block";
+            // Reset to default option
+            conversionSelect.value = "";
+            setStatus(form, "");
+          } else {
+            conversionControls.style.display = "none";
+            setStatus(form, "No conversion options available for this file type.", "error");
+          }
         }
       });
     }
@@ -95,6 +136,12 @@ function bindUploadForms() {
       }
       if (file.size > MAX_FILE_SIZE) {
         setStatus(form, "Files must be 25MB or smaller.", "error");
+        return;
+      }
+
+      const conversionSelect = form.querySelector("#image-conversion");
+      if (conversionSelect && !conversionSelect.value) {
+        setStatus(form, "Please select an output format.", "error");
         return;
       }
 
